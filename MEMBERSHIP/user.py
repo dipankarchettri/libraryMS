@@ -12,6 +12,7 @@ mycursor = mycon.cursor()
 
 
 def new_user(name, password, phoneNo, address):
+    #Exception Handling
     try:
         global mycursor
         Initial_issue = 0
