@@ -87,10 +87,10 @@ def member_search(memID):
 
 
 userexists=False
-def existing_user(userId,password):
+def existing_user(userId_phn,password):
     global mycursor
     global userexists
-    credentials=[userId,password]
+    credentials=[userId_phn,password]
     mycursor.execute("select * from usersdata")
     data=mycursor.fetchall()
     for i in data:
@@ -99,11 +99,14 @@ def existing_user(userId,password):
         if entered_credentials==credentials:
             userexists=True
             break;
+        entered_credentials2= [str(i[3]),str(i[1])]
+        if entered_credentials2==credentials:
+            userexists=True
+            break;
 
 
     if userexists==True:
         return True
     else:
         return False
-
 
