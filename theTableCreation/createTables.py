@@ -19,7 +19,7 @@ def bookTable():
     global mycursor
     mycursor.execute(
         "create table Bookstable(bookId int auto_increment, Title varchar(100), Author varchar(50), Genre varchar(100),\
-             Publisher varchar(100),NoOfCopies int, primary key(bookId))")
+             Publisher varchar(100),NoOfCopies int, NoOfCopiesLeft int, primary key(bookId))")
     mycursor.execute("alter table Bookstable auto_increment=224672")
 
 
