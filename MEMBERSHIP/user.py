@@ -106,4 +106,3 @@ def existing_user(userId,password):
         return False
 
 
-new_user("name", "password", "1236547890", "address")
