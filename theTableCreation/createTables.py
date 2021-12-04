@@ -1,6 +1,6 @@
 import mysql.connector as sq
 mycon = sq.connect(host="localhost", user="root",
-                   password="1234", database="library")
+                   password="", database="")
 if not mycon:
     print("Error in connecting")
 
@@ -37,7 +37,7 @@ def returnTable():
     mycursor.execute("alter table ReturnTable auto_increment=567889")
 
 
-#userTable()
-#bookTable()
+userTable()
+bookTable()
 issuetable()
 returnTable()
