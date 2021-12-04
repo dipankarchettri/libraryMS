@@ -128,5 +128,5 @@ def existing_user(userId_phn, password):
         return False
 
 
-def current_users():
+def current_users(a=1):
     return current_user
