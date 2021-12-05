@@ -1,9 +1,7 @@
 import datetime
 import mysql.connector as sqlt
-import pandas as pd
-from tabulate import tabulate
 con = sqlt.connect(host="localhost", user="root",
-                   password="", database="")
+                   password="1234", database="library")
 cursor = con.cursor()
 
 
@@ -30,16 +28,16 @@ def book_issue(memID, bookID):
                         NoOfCopiesLeft, bookID)
                     cursor.execute(q4)
                     con.commit()
-                    print("True")
+                    return "Book Issued"
                 else:
-                    print("Book not available")
+                    return "Book not available"
             else:
-                print("Wrong Book ID")
+                return "Wrong Book ID"
 
         else:
-            print("Wrong UserId")
+            return "Wrong UserId"
     except:
-        print("Error")
+        return False
 
 # function to return books
 
@@ -65,11 +63,11 @@ def book_return(memID, bookID):
                     remcopies, bookID)
                 cursor.execute(q4)
                 con.commit()
-                print("Book Returned...")
+                return "Book Returned..."
             else:
-                print("Wrong Book ID")
+                return "Wrong Book ID"
 
         else:
-            print("Wrong Member ID")
+            return "Wrong Member ID"
     except:
-        print("**ERROR: Wrong Entry**")
+        return "**ERROR: Wrong Entry**"
