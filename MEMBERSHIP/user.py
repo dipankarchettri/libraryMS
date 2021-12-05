@@ -27,11 +27,9 @@ def new_user(name, password, phoneNo, address):
         return True
     else:
         if not phoneNo.isdigit():
-            print("error:phoneNo all digits not satsfied ")
-            return False
+            return "Invalid phoneNo"
         else:
-            print("error: password too short")
-            return False
+            return "Password too short"
 
     return False
 
@@ -128,5 +126,5 @@ def existing_user(userId_phn, password):
         return False
 
 
-def current_users(a=1):
+def current_users():
     return current_user
