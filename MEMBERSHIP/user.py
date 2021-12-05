@@ -16,7 +16,6 @@ def new_user(name, password, phoneNo, address):
 
     global mycursor
     global current_user
-    current_user.append(0)
     Initial_issue = 0
     credentials = [name, password, address, phoneNo, Initial_issue]
     if phoneNo.isdigit() and len(phoneNo) == 10 and len(password) > 5:
@@ -24,6 +23,8 @@ def new_user(name, password, phoneNo, address):
             name, password, phoneNo, address, Initial_issue))
         mycon.commit()
         current_user.extend(credentials)
+        current_user.append(0)
+
         return True
     else:
         if not phoneNo.isdigit():
@@ -112,12 +113,7 @@ def existing_user(userId_phn, password):
         if entered_credentials2 == credentials:
             userexists = True
             x = list(i)
-            current_user.append(0)
-            current_user.append(x[0])
-            current_user.append(x[1])
-            current_user.append(x[4])
-            current_user.append(x[3])
-            current_user.append(x[5])
+            current_user = list(i)
             break
 
     if userexists == True:
@@ -127,4 +123,9 @@ def existing_user(userId_phn, password):
 
 
 def current_users():
+
     return current_user
+
+
+existing_user("0147852369", "coldplay")
+print(current_users())
