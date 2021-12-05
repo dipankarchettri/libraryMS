@@ -1,7 +1,7 @@
 from libraryMS.BOOKS.books import *
 from libraryMS.MEMBERSHIP.user import *
 from libraryMS.ISSUE.transaction import *
-# C:\Users\dipan\AppData\Local\Programs\Python\Python310\Lib\site-packages\libraryproject
+# C:\Users\dipan\AppData\Local\Programs\Python\Python310\Lib\site-packages
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
@@ -18,17 +18,6 @@ root.configure(background='pink')
 frame = LabelFrame(root, bg="pink")
 frame.pack(side="top", expand='yes', fill='both')
 
-lblfrstrow = Label(frame, text="Username -")
-lblfrstrow.place(x=50, y=20)
-
-Username = Entry(frame, width=35, borderwidth=5)
-Username.place(x=150, y=20, width=200)
-
-lblsecrow = Label(frame, text="Password -")
-lblsecrow.place(x=50, y=50)
-
-password = Entry(frame, width=35, borderwidth=5)
-password.place(x=150, y=50, width=200)
 
 currentUser = ''
 
@@ -42,24 +31,34 @@ def clearFrame():
         widget.destroy()
 
 
-def login():
-    if Username.get() == "" or password.get() == "":
-        messagebox.showinfo("Error", "Please complete the required field!")
-    elif(existing_user(str(Username.get()), str(password.get()))):
-        #messagebox.showinfo("Welcome","valid username or password.")
-        clearFrame()
+def issue_book():
+    return
 
-        x = current_users()
-        name = "Hello "+x[1]
-        lblfrstrow = Label(frame, text=name, bg='pink')
-        lblfrstrow.place(x=0, y=0)
-        # lblscnrow = Label(frame, text="Welcome to the library", bg='pink')
-        # lblscnrow.place(x=0, y=10)
 
-    else:
-        messagebox.showinfo("Error", "Invalid username or password.")
-        Username.delete(0, END)
-        password.delete(0, END)
+def after_login_signup():
+    x = current_users()
+    name = str(x[0])
+
+    def selected(event):
+        if clicked.get() == "logout":
+            clearFrame()
+            mainpro()
+
+    clicked = StringVar()
+    clicked.set(name)
+    drop = OptionMenu(frame, clicked, name, "logout", command=selected)
+    drop.place(x=0, y=0)
+
+    issuebtn = Button(frame, text="ISSUE BOOKS", width=35)
+    issuebtn.place(x=150, y=50)
+    returnbtn = Button(frame, text="RETURN BOOKS", width=35)
+    returnbtn.place(x=150, y=80)
+    searchbtn = Button(frame, text="SEARCH FOR A BOOK", width=35)
+    searchbtn.place(x=150, y=110)
+    searchgenbtn = Button(frame, text="SEACRH BY GENRE", width=35)
+    searchgenbtn.place(x=150, y=140)
+    showallbtn = Button(frame, text="SHOW THE COLLECTION", width=35)
+    showallbtn.place(x=150, y=170)
 
 
 def signup():
@@ -104,6 +103,7 @@ def signup():
         elif new_user(str(Username.get()), str(password.get()), str(contact.get()), str(address.get())):
             messagebox.showinfo("Success", "User Created Succesfully")
             clearFrame()
+            after_login_signup()
         else:
             messagebox.messagebox.showinfo("Error", "User cant be created")
 
@@ -112,13 +112,46 @@ def signup():
     signinbtn.place(x=160, y=190, width=155)
 
 
-submitbtn = Button(frame, text="Login", command=login,
-                   bg='yellow')
-submitbtn.place(x=160, y=135, width=155)
+def login():
+    if Username.get() == "" or password.get() == "":
+        messagebox.showinfo("Error", "Please complete the required field!")
+    elif(existing_user(str(Username.get()), str(password.get()))):
+        #messagebox.showinfo("Welcome","valid username or password.")
+        clearFrame()
+        after_login_signup()
+        # lblscnrow = Label(frame, text="Welcome to the library", bg='pink')
+        # lblscnrow.place(x=0, y=10)
 
-gosignupbtn = Button(frame, text="Not a member? SignIn Now...", command=signup,
-                     fg='blue')
-gosignupbtn.place(x=160, y=190, width=155)
+    else:
+        messagebox.showinfo("Error", "Invalid username or password.")
+        Username.delete(0, END)
+        password.delete(0, END)
 
 
-root.mainloop()
+def mainpro():
+    global Username
+    global password
+    lblfrstrow = Label(frame, text="Username -")
+    lblfrstrow.place(x=50, y=20)
+
+    Username = Entry(frame, width=35, borderwidth=5)
+    Username.place(x=150, y=20, width=200)
+
+    lblsecrow = Label(frame, text="Password -")
+    lblsecrow.place(x=50, y=50)
+
+    password = Entry(frame, width=35, borderwidth=5)
+    password.place(x=150, y=50, width=200)
+
+    submitbtn = Button(frame, text="Login", command=login,
+                       bg='yellow')
+    submitbtn.place(x=160, y=135, width=155)
+
+    gosignupbtn = Button(frame, text="Not a member? SignIn Now...", command=signup,
+                         fg='blue')
+    gosignupbtn.place(x=160, y=190, width=155)
+
+    root.mainloop()
+
+
+mainpro()
