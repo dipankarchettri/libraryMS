@@ -127,5 +127,16 @@ def current_users():
     return current_user
 
 
-existing_user("0147852369", "coldplay")
-print(current_users())
+def current_user_id(Name):
+    mycursor.execute("select * from usersdata")
+    data = mycursor.fetchall()
+    for i in data:
+        list(i)
+        print(i)
+        print(Name)
+        if Name == str(i[0]):
+            return str(i[2])
+            break
+
+
+print(current_user_id("dipankar "))
