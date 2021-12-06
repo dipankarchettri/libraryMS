@@ -37,7 +37,7 @@ def book_issue(memID, bookID):
         else:
             return "Wrong UserId"
     except:
-        return False
+        return "Wrong Entry"
 
 # function to return books
 
