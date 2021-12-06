@@ -103,6 +103,3 @@ def book_return(memID, bookID):
             return "You dont have any books issued"
     except:
         return "Wrong Entry"
-
-
-print(book_return("779531", "224674"))
