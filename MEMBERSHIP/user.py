@@ -132,11 +132,6 @@ def current_user_id(Name):
     data = mycursor.fetchall()
     for i in data:
         list(i)
-        print(i)
-        print(Name)
         if Name == str(i[0]):
             return str(i[2])
             break
-
-
-print(current_user_id("dipankar "))
