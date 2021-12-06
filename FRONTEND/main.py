@@ -5,8 +5,10 @@ from libraryMS.ISSUE.transaction import *
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+import string
 
 
+userID = ''
 root = Tk()
 root.iconbitmap('E:/libraryMS/FRONTEND/icon.ico')
 root.geometry("500x500")
@@ -19,9 +21,6 @@ frame = LabelFrame(root, bg="pink")
 frame.pack(side="top", expand='yes', fill='both')
 
 
-currentUser = ''
-
-
 def close_window():
     root.destroy()
 
@@ -32,12 +31,31 @@ def clearFrame():
 
 
 def issue_book():
-    return
+    clearFrame()
+    lblfrstrow = Label(frame, text="BookID -")
+    lblfrstrow.place(x=50, y=20)
+
+    bookid = Entry(frame, width=35, borderwidth=5)
+    bookid.place(x=150, y=20, width=200)
+
+    def pseudo_issue():
+        book_issue(userID, str(bookid.get()))
+        if book_issue(userID, str(bookid.get())) == "Book Issued":
+            messagebox.showinfo("Success", "Book Issued")
+        else:
+            messagebox.showinfo(
+                "Error", book_issue(userID, str(bookid.get())))
+
+    issue = Button(frame, text="ISSUE", command=pseudo_issue,
+                   fg='blue')
+    issue.place(x=160, y=190, width=155)
 
 
 def after_login_signup():
     x = current_users()
+    global userID
     name = str(x[0])
+    userID = current_user_id(name)
 
     def selected(event):
         if clicked.get() == "logout":
@@ -49,7 +67,7 @@ def after_login_signup():
     drop = OptionMenu(frame, clicked, name, "logout", command=selected)
     drop.place(x=0, y=0)
 
-    issuebtn = Button(frame, text="ISSUE BOOKS", width=35)
+    issuebtn = Button(frame, text="ISSUE BOOKS", width=35, command=issue_book)
     issuebtn.place(x=150, y=50)
     returnbtn = Button(frame, text="RETURN BOOKS", width=35)
     returnbtn.place(x=150, y=80)
