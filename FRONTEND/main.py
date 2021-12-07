@@ -1,18 +1,26 @@
-from libraryMS.BOOKS.books import *
+from books import *
 from libraryMS.MEMBERSHIP.user import *
 from libraryMS.ISSUE.transaction import *
 # C:\Users\dipan\AppData\Local\Programs\Python\Python310\Lib\site-packages
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+import mysql.connector
+
+mycon = mysql.connector.connect(
+    host="localhost", user="root", password="1234", database="library")
+
+if not mycon:
+    print("Error in connecting")
+mycursor = mycon.cursor()
 
 userID = ''
 root = Tk()
 root.iconbitmap('E:/libraryMS/FRONTEND/icon.ico')
-root.geometry("500x500")
+root.geometry("690x500")
 frame = LabelFrame(root)
 frame.pack(side="top", expand='yes', fill='both')
-#root.attributes('-fullscreen', True)
+# root.attributes('-fullscreen', True)
 root.title("cubra")
 root.resizable(False, False)
 # root.bind('<Escape>', lambda e: root.destroy()) make escape exit the program
@@ -51,20 +59,80 @@ def verifyreturn():
             str(userID), str(bookid.get())))
 
 
+def makesearch():
+    clearFrame()
+    mycursor.execute("select * from bookstable ")
+    tv = ttk.Treeview(frame)
+    tv["columns"] = ("1", "2", "3", "4")
+    tv.column("1", anchor=CENTER, width=120, minwidth=120)
+    tv.column("2", anchor=CENTER, width=200, minwidth=120)
+    tv.column("3", anchor=CENTER, width=200, minwidth=120)
+    tv.column("4", anchor=CENTER, width=120, minwidth=120)
+
+    tv.heading(1, text="BookID")
+    tv.heading(2, text="Title")
+    tv.heading(3, text="Author")
+    tv.heading(4, text="Availability")
+
+    i = 0
+    for row in mycursor:
+        tv.insert(parent='', index='end', iid=i,
+                  values=(row[0], row[1], row[2], row[6]))
+        #tv.insert('', i, text='', values=(row[0], row[1], row[2], row[4]))
+        i = i+1
+    tv.place(x=20, y=80)
+
+
+def make():
+    clearFrame()
+    #a = str(bookid2.get())
+    mycursor.execute("select * from bookstable ")
+
+    # book_search(int(bookid2.get()))
+    tv = ttk.Treeview(frame, columns=(1, 2, 3, 4),
+                      show="headings", height="15")
+    tv.place(x=20, y=80)
+
+    tv.column("1", anchor=CENTER, width=120, minwidth=120)
+    tv.column("2", anchor=CENTER, width=200, minwidth=120)
+    tv.column("3", anchor=CENTER, width=200, minwidth=120)
+    tv.column("4", anchor=CENTER, width=120, minwidth=120)
+
+    tv.heading(1, text="BookID")
+    tv.heading(2, text="Title")
+    tv.heading(3, text="Author")
+    tv.heading(4, text="Availability")
+    i = 0
+    for row in mycursor:
+        if row[6] > 0:
+            tv.insert('', i, text='', values=(
+                row[0], row[1], row[2], "Available"))
+        else:
+            tv.insert('', i, text='', values=(
+                row[0], row[1], row[2], " Not Available"))
+        i = i+1
+
+    back = Button(frame, text="Main Menu", bg='cyan',
+                  command=after_login_signup)
+    back.place(x=260, y=430, width=155)
+
+
 def after_searchForbook():
     clearFrame()
     lblfrstrow = Label(frame, text="Title *")
     lblfrstrow.place(x=150, y=90)
 
-    global bookname
-    bookname = Entry(frame, width=35, borderwidth=5)
-    bookname.place(x=150, y=110, width=200)
+    global bookid2
+    bookid2 = Entry(frame, width=35, borderwidth=5)
+    bookid2.place(x=150, y=110, width=200)
 
-    #login_btn = PhotoImage(file='E:/libraryMS/FRONTEND/login.png')
-    searchbtn = Button(frame, text="SEARCH", command=login, borderwidth=0)
-    searchbtn.place(x=160, y=220, width=155)
+    verifysearch = Button(frame, text="SEARCH", command=make,
+                          bg='yellow')
+    verifysearch.place(x=165, y=150, width=155)
 
-    return
+    back = Button(frame, text="Main Menu", bg='cyan',
+                  command=after_login_signup)
+    back.place(x=165, y=180, width=155)
 
 
 def after_issuebtn():
@@ -104,6 +172,11 @@ def after_returnbtn():
     return
 
 
+def account():
+    l = Label(frame, text="hello")
+    l.place(x=0, y=0)
+
+
 def after_login_signup():
     clearFrame()
     x = current_users()
@@ -115,10 +188,14 @@ def after_login_signup():
         if clicked.get() == "logout":
             clearFrame()
             mainpro()
+        elif clicked.get() == "accountsettings":
+            clearFrame()
+            account()
 
     clicked = StringVar()
     clicked.set(name)
-    drop = OptionMenu(frame, clicked, name, "logout", command=selected)
+    drop = OptionMenu(frame, clicked, name, "accountsettings",
+                      "logout", command=selected)
     drop.place(x=0, y=0)
 
     issuebtn = Button(frame, text="ISSUE BOOKS",
@@ -127,13 +204,9 @@ def after_login_signup():
     returnbtn = Button(frame, text="RETURN BOOKS",
                        width=35, command=after_returnbtn)
     returnbtn.place(x=150, y=80)
-    searchbtn = Button(frame, text="SEARCH FOR A BOOK",
-                       width=35, command=after_searchForbook)
+    searchbtn = Button(frame, text="SHOW ALL BOOKS",
+                       width=35, command=make)
     searchbtn.place(x=150, y=110)
-    searchgenbtn = Button(frame, text="SEACRH BY GENRE", width=35)
-    searchgenbtn.place(x=150, y=140)
-    showallbtn = Button(frame, text="SHOW THE COLLECTION", width=35)
-    showallbtn.place(x=150, y=170)
 
 
 def signup_click():
@@ -199,7 +272,7 @@ def login():
     if Username.get() == "" or password.get() == "":
         messagebox.showinfo("Error", "Please complete the required field!")
     elif(existing_user(str(Username.get()), str(password.get()))):
-        #messagebox.showinfo("Welcome","valid username or password.")
+        # messagebox.showinfo("Welcome","valid username or password.")
         clearFrame()
         after_login_signup()
         # lblscnrow = Label(frame, text="Welcome to the library", bg='pink')
