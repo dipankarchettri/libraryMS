@@ -8,7 +8,7 @@ from tkinter import messagebox
 import mysql.connector
 
 mycon = mysql.connector.connect(
-    host="localhost", user="root", password="sristi", database="library")
+    host="localhost", user="root", password="1234", database="library")
 
 if not mycon:
     print("Error in connecting")
@@ -17,12 +17,13 @@ mycursor = mycon.cursor()
 userID = ''
 root = Tk()
 root.iconbitmap('FRONTEND/iconAndImages/icon.ico')
-root.geometry("690x500")
+root.geometry("690x450")
 frame = LabelFrame(root)
 frame.pack(side="top", expand='yes', fill='both')
 # root.attributes('-fullscreen', True)
 root.title("cubra")
 root.resizable(False, False)
+root.configure(bg='pink')
 # root.bind('<Escape>', lambda e: root.destroy()) make escape exit the program
 
 
@@ -174,21 +175,50 @@ def after_returnbtn():
 
 def change_passworde():
     a = paw.get()
-    pwd_edit(int(userID), a)
-    if pwd_edit(a, address.get()):
+    if paw.get == "":
+        messagebox.showinfo("Error", "Please complete the required field")
+    elif len(paw.get()) < 6:
+        messagebox.showinfo("Error", "Password too short ")
+    elif pwd_edit(a, paw.get()):
+        pwd_edit(int(userID), a)
         messagebox.showinfo("Success", "Password Changed")
+        account()
     else:
         messagebox.showinfo("Success", "Error")
 
 
+def change_phone():
+    a = phone2.get()
+    if phone2.get == "":
+        messagebox.showinfo("Error", "Please complete the required field")
+    elif len(phone2.get()) != 10:
+        messagebox.showinfo("Error", "Invalid Phone No")
+    elif phno_edit(int(userID), phone2.get()):
+        phno_edit(int(userID), a)
+        messagebox.showinfo("Success", "PhoneNO Changed")
+        account()
+    else:
+        messagebox.showinfo("Success", phno_edit(int(userID), a))
+
+
 def change_address():
+
     global address
+    if address.get == "":
+        messagebox.showinfo("Error", "Please complete the required field")
     a = address.get()
-    ad_edit(int(userID), a)
-    if ad_edit(userID, address.get()):
+    if ad_edit(int(userID), address.get()):
+        ad_edit(int(userID), a)
         messagebox.showinfo("Success", "Address Changed")
+        account()
     else:
         messagebox.showinfo("Success", ad_edit(int(userID), a))
+
+
+def delete_account():
+    member_delete(int(userID))
+    messagebox.showinfo("GoodBye", "We are sad to see you GO!!!")
+    mainpro()
 
 
 def passwor():
@@ -211,14 +241,15 @@ def passwor():
 
 def phone():
     clearFrame()
-    address = Entry(frame, width=35, borderwidth=5)
-    address.place(x=150, y=170, width=350)
+    global phone2
+    phone2 = Entry(frame, width=35, borderwidth=5)
+    phone2.place(x=150, y=170, width=350)
 
-    lblsecrow = Label(frame, text="New Address *")
+    lblsecrow = Label(frame, text="New PhoneNO *")
     lblsecrow.place(x=150, y=150)
 
-    submit = Button(frame, text="Change Address", bg='cyan',
-                    command=change_address)
+    submit = Button(frame, text="Change PhoneNo",
+                    bg='cyan', command=change_phone)
     submit.place(x=260, y=220, width=155)
 
     back = Button(frame, text="Back", bg='cyan',
@@ -254,10 +285,16 @@ def account():
     changepassword.place(x=180, y=80)
     changepassword = Button(
         frame, text="Change PhoneNo", width=35, borderwidth=5, command=phone)
+
     changepassword.place(x=180, y=120)
     changepassword = Button(
         frame, text="Change Password", width=35, borderwidth=5, command=passwor)
     changepassword.place(x=180, y=160)
+
+    delete = Button(
+        frame, text="Delete Account", width=35, borderwidth=5, bg="red", command=delete_account)
+    delete.place(x=180, y=200)
+
     back = Button(frame, text="Main Menu", bg='cyan',
                   command=after_login_signup)
     back.place(x=260, y=430, width=155)
@@ -299,16 +336,15 @@ def after_login_signup():
 def signup_click():
     error = new_user(str(Username2.get()), str(password2.get()),
                      str(contact2.get()), str(address2.get()))
+    if Username2.get() == "" or password2.get() == "" or contact2.get() == "" or address2.get() == "":
+        messagebox.showinfo("Error", "Please complete the required field!")
 
-    if error != True:
+    elif error != True:
         messagebox.showinfo("Error", error)
         Username2.delete(0, END)
         password2.delete(0, END)
         contact2.delete(0, END)
         address2.delete(0, END)
-
-    elif Username2.get() == "" or password2.get() == "" or contact2.get() == "" or address2.get() == "":
-        messagebox.showinfo("Error", "Please complete the required field!")
 
     elif error:
         messagebox.showinfo(
@@ -321,37 +357,37 @@ def signup_click():
 def signup():
     clearFrame()
 
-    lblfrstrow = Label(frame, text="Name -")
-    lblfrstrow.place(x=50, y=20)
+    lblfrstrow = Label(frame, text="Name *")
+    lblfrstrow.place(x=150, y=60)
     global Username2
     Username2 = Entry(frame, width=35, borderwidth=5)
-    Username2.place(x=150, y=20, width=200)
+    Username2.place(x=150, y=80, width=200)
 
     lblsecrow = Label(frame, text="Password -")
-    lblsecrow.place(x=50, y=50)
+    lblsecrow.place(x=150, y=110)
 
     global password2
     password2 = Entry(frame, width=35, borderwidth=5)
-    password2.place(x=150, y=50, width=200)
+    password2.place(x=150, y=130, width=200)
 
     lblthrdrow = Label(frame, text="Contact Number -")
-    lblthrdrow.place(x=50, y=80)
+    lblthrdrow.place(x=150, y=160)
 
     global contact2
     contact2 = Entry(frame, width=35, borderwidth=5)
-    contact2.place(x=150, y=80, width=200)
+    contact2.place(x=150, y=180, width=200)
 
     lblthrdrow = Label(frame, text="Address -")
-    lblthrdrow.place(x=50, y=110)
+    lblthrdrow.place(x=150, y=200)
 
     global address2
     address2 = Entry(frame, width=35, borderwidth=5)
-    address2.place(x=150, y=110, width=200)
+    address2.place(x=150, y=230, width=200)
 
     global signinbtn2
-    signinbtn2 = Button(frame, text="Create Account", command=signup_click,
-                        fg='yellow')
-    signinbtn2.place(x=160, y=190, width=155)
+    signinbtn2 = Button(frame, text="Create Account",
+                        command=signup_click, width=35, borderwidth=5)
+    signinbtn2.place(x=160, y=300, width=155)
 
 
 def login():
@@ -371,13 +407,60 @@ def login():
         password.delete(0, END)
 
 
+def admin():
+    clearFrame()
+    global Username
+    global password
+
+    def selected(event):
+        if clicked.get() == "memberlogin":
+            clearFrame()
+            mainpro()
+        elif clicked.get() == "adminlogin":
+            clearFrame()
+            admin()
+
+    clicked = StringVar()
+    clicked.set("memberlogin")
+    drop = OptionMenu(frame, clicked, "memberlogin",
+                      "adminlogin", command=selected)
+    drop.place(x=0, y=0)
+    lblfrstrow = Label(frame, text="Administrative Username *")
+    lblfrstrow.place(x=150, y=90)
+
+    Username4 = Entry(frame, width=35, borderwidth=5)
+    Username4.place(x=150, y=110, width=200)
+
+    lblsecrow4 = Label(frame, text="Administrative Password *")
+    lblsecrow4.place(x=150, y=150)
+
+    password4 = Entry(frame, width=35, borderwidth=5)
+    password4.place(x=150, y=170, width=200)
+
+    submitbtn2 = Button(frame, text="Administrative Login",
+                        width=35, borderwidth=5)
+    submitbtn2.place(x=160, y=220, width=180)
+
+
 def mainpro():
     clearFrame()
     global Username
     global password
-    # setting bg
-    # mylabel = Label(frame, image=bg)
-    # mylabel.place(x=0, y=0, relheight=1, relwidth=1)
+
+    def selected(event):
+        if clicked.get() == "memberlogin":
+            clearFrame()
+            mainpro()
+        elif clicked.get() == "adminlogin":
+            clearFrame()
+            admin()
+
+    clicked = StringVar()
+    clicked.set("memberlogin")
+    drop = OptionMenu(frame, clicked, "adminlogin",
+                      "memberlogin", command=selected)
+    drop.place(x=0, y=0)
+
     lblfrstrow = Label(frame, text="Username *")
     lblfrstrow.place(x=150, y=90)
 
@@ -400,7 +483,8 @@ def mainpro():
     labpwd.place(x=250, y=200)
 
     registerbtn = PhotoImage(file='FRONTEND/iconAndImages/reg.png')
-    register = Button(frame, image=registerbtn, command=signup, borderwidth=0)
+    register = Button(frame, image=registerbtn,
+                      command=signup, borderwidth=0)
     register.place(x=160, y=300, width=155)
 
     root.mainloop()

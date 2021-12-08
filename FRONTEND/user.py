@@ -4,7 +4,7 @@ from tabulate import tabulate
 current_user = []
 
 mycon = mysql.connector.connect(
-    host="localhost", user="root", password="sristi", database="library")
+    host="localhost", user="root", password="1234", database="library")
 
 if not mycon:
     print("Error in connecting")
@@ -42,13 +42,11 @@ def phno_edit(memID, phoneNo):
         mycursor.execute(qry)
         r = mycursor.fetchone()
         if r:
-            def update():
-                qry1 = "update usersdata set PhoneNo='{}' where userId='{}';".format(
-                    phoneNo, memID)
-                mycursor.execute(qry1)
-                mycon.commit()
-                return "Phone No changed"
-            update()
+            qry1 = "update usersdata set PhoneNo='{}' where userId='{}';".format(
+                phoneNo, memID)
+            mycursor.execute(qry1)
+            mycon.commit()
+            return True
         else:
             return "Wrong userId"
     except:
@@ -62,17 +60,15 @@ def ad_edit(memID, address):
         mycursor.execute(qry)
         r = mycursor.fetchone()
         if r:
-            def update():
-                qry1 = "update usersdata set address='{}' where userId='{}';".format(
-                    address, memID)
-                mycursor.execute(qry1)
-                mycon.commit()
-                return True
-            update()
+            qry1 = "update usersdata set address='{}' where userId={};".format(
+                address, memID)
+            mycursor.execute(qry1)
+            mycon.commit()
+            return True
         else:
             return "Wrong userId"
     except:
-        return False
+        return "False"
 
 
 def pwd_edit(memID, password):
@@ -82,13 +78,13 @@ def pwd_edit(memID, password):
         mycursor.execute(qry)
         r = mycursor.fetchone()
         if r:
-            def update():
-                qry1 = "update usersdata set Password='{}' where userId='{}';".format(
-                    password, memID)
-                mycursor.execute(qry1)
-                mycon.commit()
-                return True
-            update()
+
+            qry1 = "update usersdata set Password='{}' where userId='{}';".format(
+                password, memID)
+            mycursor.execute(qry1)
+            mycon.commit()
+            return True
+
         else:
             return "Wrong userId"
     except:
@@ -172,6 +168,3 @@ def current_user_id(Name):
         if Name == str(i[0]):
             return str(i[2])
             break
-
-
-print(ad_edit(779532, "nschool"))

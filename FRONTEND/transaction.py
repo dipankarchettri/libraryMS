@@ -1,7 +1,7 @@
 import datetime
 import mysql.connector as sqlt
 con = sqlt.connect(host="localhost", user="root",
-                   password="sristi", database="library")
+                   password="1234", database="library")
 cursor = con.cursor()
 
 
