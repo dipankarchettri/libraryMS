@@ -1,6 +1,6 @@
 from books import *
-from libraryMS.MEMBERSHIP.user import *
-from libraryMS.ISSUE.transaction import *
+from user import *
+from transaction import *
 # C:\Users\dipan\AppData\Local\Programs\Python\Python310\Lib\site-packages
 from tkinter import *
 from tkinter import ttk
@@ -8,7 +8,7 @@ from tkinter import messagebox
 import mysql.connector
 
 mycon = mysql.connector.connect(
-    host="localhost", user="root", password="1234", database="library")
+    host="localhost", user="root", password="sristi", database="library")
 
 if not mycon:
     print("Error in connecting")
@@ -16,7 +16,7 @@ mycursor = mycon.cursor()
 
 userID = ''
 root = Tk()
-root.iconbitmap('E:/libraryMS/FRONTEND/icon.ico')
+root.iconbitmap('FRONTEND/iconAndImages/icon.ico')
 root.geometry("690x500")
 frame = LabelFrame(root)
 frame.pack(side="top", expand='yes', fill='both')
@@ -78,14 +78,14 @@ def makesearch():
     for row in mycursor:
         tv.insert(parent='', index='end', iid=i,
                   values=(row[0], row[1], row[2], row[6]))
-        #tv.insert('', i, text='', values=(row[0], row[1], row[2], row[4]))
+        # tv.insert('', i, text='', values=(row[0], row[1], row[2], row[4]))
         i = i+1
     tv.place(x=20, y=80)
 
 
 def make():
     clearFrame()
-    #a = str(bookid2.get())
+    # a = str(bookid2.get())
     mycursor.execute("select * from bookstable ")
 
     # book_search(int(bookid2.get()))
@@ -172,9 +172,95 @@ def after_returnbtn():
     return
 
 
+def change_passworde():
+    a = paw.get()
+    pwd_edit(int(userID), a)
+    if pwd_edit(a, address.get()):
+        messagebox.showinfo("Success", "Password Changed")
+    else:
+        messagebox.showinfo("Success", "Error")
+
+
+def change_address():
+    global address
+    a = address.get()
+    ad_edit(int(userID), a)
+    if ad_edit(userID, address.get()):
+        messagebox.showinfo("Success", "Address Changed")
+    else:
+        messagebox.showinfo("Success", ad_edit(int(userID), a))
+
+
+def passwor():
+    clearFrame()
+    global paw
+    paw = Entry(frame, width=35, borderwidth=5)
+    paw.place(x=150, y=170, width=350)
+
+    lblsecrow = Label(frame, text="New Password *")
+    lblsecrow.place(x=150, y=150)
+
+    submit = Button(frame, text="Change Password",
+                    bg='cyan', command=change_passworde)
+    submit.place(x=260, y=220, width=155)
+
+    back = Button(frame, text="Back", bg='cyan',
+                  command=account)
+    back.place(x=260, y=430, width=155)
+
+
+def phone():
+    clearFrame()
+    address = Entry(frame, width=35, borderwidth=5)
+    address.place(x=150, y=170, width=350)
+
+    lblsecrow = Label(frame, text="New Address *")
+    lblsecrow.place(x=150, y=150)
+
+    submit = Button(frame, text="Change Address", bg='cyan',
+                    command=change_address)
+    submit.place(x=260, y=220, width=155)
+
+    back = Button(frame, text="Back", bg='cyan',
+                  command=account)
+    back.place(x=260, y=430, width=155)
+
+
+def address():
+    clearFrame()
+    global address
+    address = Entry(frame, width=35, borderwidth=5)
+    address.place(x=150, y=170, width=350)
+
+    lblsecrow = Label(frame, text="New Address *")
+    lblsecrow.place(x=150, y=150)
+
+    submit = Button(frame, text="Change Address", bg='cyan',
+                    command=change_address)
+    submit.place(x=260, y=220, width=155)
+
+    back = Button(frame, text="Back", bg='cyan',
+                  command=account)
+    back.place(x=260, y=430, width=155)
+
+
 def account():
-    l = Label(frame, text="hello")
-    l.place(x=0, y=0)
+    clearFrame()
+
+    l = Label(frame, text="Change account settings")
+    l.place(x=500/2, y=50)
+    changepassword = Button(
+        frame, text="Change Addres", width=35, borderwidth=5, command=address)
+    changepassword.place(x=180, y=80)
+    changepassword = Button(
+        frame, text="Change PhoneNo", width=35, borderwidth=5, command=phone)
+    changepassword.place(x=180, y=120)
+    changepassword = Button(
+        frame, text="Change Password", width=35, borderwidth=5, command=passwor)
+    changepassword.place(x=180, y=160)
+    back = Button(frame, text="Main Menu", bg='cyan',
+                  command=after_login_signup)
+    back.place(x=260, y=430, width=155)
 
 
 def after_login_signup():
@@ -194,19 +280,20 @@ def after_login_signup():
 
     clicked = StringVar()
     clicked.set(name)
+
     drop = OptionMenu(frame, clicked, name, "accountsettings",
                       "logout", command=selected)
     drop.place(x=0, y=0)
 
     issuebtn = Button(frame, text="ISSUE BOOKS",
-                      width=35, command=after_issuebtn)
-    issuebtn.place(x=150, y=50)
+                      width=35, borderwidth=5, command=after_issuebtn)
+    issuebtn.place(x=180, y=130)
     returnbtn = Button(frame, text="RETURN BOOKS",
-                       width=35, command=after_returnbtn)
-    returnbtn.place(x=150, y=80)
+                       width=35, borderwidth=5, command=after_returnbtn)
+    returnbtn.place(x=180, y=170)
     searchbtn = Button(frame, text="SHOW ALL BOOKS",
-                       width=35, command=make)
-    searchbtn.place(x=150, y=110)
+                       width=35, borderwidth=5, command=make)
+    searchbtn.place(x=180, y=210)
 
 
 def signup_click():
@@ -304,11 +391,15 @@ def mainpro():
     password.place(x=150, y=170, width=200)
 
     login_btn = PhotoImage(
-        file='E:/libraryMS/FRONTEND/login.png')
+        file='FRONTEND/iconAndImages/login.png')
     submitbtn = Button(frame, image=login_btn, command=login, borderwidth=0)
     submitbtn.place(x=160, y=220, width=155)
 
-    registerbtn = PhotoImage(file='FRONTEND/reg.png')
+    labpwd = Button(frame, text="Forgot Password?",
+                    fg="blue", height=1, borderwidth=0)
+    labpwd.place(x=250, y=200)
+
+    registerbtn = PhotoImage(file='FRONTEND/iconAndImages/reg.png')
     register = Button(frame, image=registerbtn, command=signup, borderwidth=0)
     register.place(x=160, y=300, width=155)
 

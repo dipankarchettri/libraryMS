@@ -3,7 +3,7 @@ import pandas as pd
 from tabulate import tabulate
 
 mycon = mysql.connector.connect(
-    host="localhost", user="root", password="1234", database="library")
+    host="localhost", user="root", password="sristi", database="library")
 
 if not mycon:
     print("Error in connecting")
