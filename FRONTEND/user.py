@@ -4,7 +4,7 @@ from tabulate import tabulate
 current_user = []
 
 mycon = mysql.connector.connect(
-    host="localhost", user="root", password="1234", database="library")
+    host="localhost", user="root", password="sristi", database="library")
 
 if not mycon:
     print("Error in connecting")
@@ -35,7 +35,7 @@ def new_user(name, password, phoneNo, address):
     return False
 
 
-def member_edit(memID, phoneNo):
+def phno_edit(memID, phoneNo):
     # Exception Handling
     try:
         qry = "select * from usersdata where userId='{}';".format(memID)
@@ -54,7 +54,8 @@ def member_edit(memID, phoneNo):
     except:
         return False
 
-def member_edit(memID, address):
+
+def ad_edit(memID, address):
     # Exception Handling
     try:
         qry = "select * from usersdata where userId='{}';".format(memID)
@@ -62,18 +63,19 @@ def member_edit(memID, address):
         r = mycursor.fetchone()
         if r:
             def update():
-                qry1 = "update usersdata set Ddress='{}' where userId='{}';".format(
+                qry1 = "update usersdata set address='{}' where userId='{}';".format(
                     address, memID)
                 mycursor.execute(qry1)
                 mycon.commit()
-                return "Address changed"
+                return True
             update()
         else:
             return "Wrong userId"
     except:
         return False
 
-def member_edit(memID, password):
+
+def pwd_edit(memID, password):
     # Exception Handling
     try:
         qry = "select * from usersdata where userId='{}';".format(memID)
@@ -85,12 +87,13 @@ def member_edit(memID, password):
                     password, memID)
                 mycursor.execute(qry1)
                 mycon.commit()
-                return "Password changed"
+                return True
             update()
         else:
             return "Wrong userId"
     except:
         return False
+
 
 def member_delete(memID):
     # Exception Handling
@@ -169,3 +172,6 @@ def current_user_id(Name):
         if Name == str(i[0]):
             return str(i[2])
             break
+
+
+print(ad_edit(779532, "nschool"))
