@@ -8,7 +8,7 @@ from tkinter import messagebox
 import mysql.connector
 
 mycon = mysql.connector.connect(
-    host="localhost", user="root", password="1234", database="library")
+    host="localhost", user="root", password="sristi", database="library")
 
 if not mycon:
     print("Error in connecting")
@@ -25,10 +25,6 @@ root.title("cubra")
 root.resizable(False, False)
 root.configure(bg='pink')
 # root.bind('<Escape>', lambda e: root.destroy()) make escape exit the program
-
-
-def close_window():
-    root.destroy()
 
 
 def clearFrame():
@@ -407,6 +403,106 @@ def login():
         password.delete(0, END)
 
 
+def dclick():
+    if add_book(bookname.get(), author.get(), genre.get(), publisher.get(), int(stock.get())):
+        messagebox.showinfo(
+            "Success", "Successfully added the book into the library")
+        afteradlog()
+    else:
+        messagebox.showinfo("Error", "Could not add the books")
+
+
+def eclick():
+    if book_delete(int(bookid1.get())):
+        messagebox.showinfo("Success", "Books Successfully Deleted")
+        afteradlog()
+    else:
+        messagebox.showinfo("Error", "Wrong BookID")
+    return
+
+
+def delbboks():
+    clearFrame()
+    lblfrstrow = Label(frame, text="BookID *")
+    lblfrstrow.place(x=150, y=90)
+    global bookid1
+    bookid1 = Entry(frame, width=35, borderwidth=5)
+    bookid1.place(x=150, y=110, width=200)
+    delbtn = Button(frame, text="DELETE",
+                    width=35, borderwidth=5, command=eclick)
+    delbtn.place(x=180, y=150)
+    return()
+
+
+def adaddboks():
+    clearFrame()
+    lblfrstrow = Label(frame, text="Title *")
+    lblfrstrow.place(x=150, y=90)
+    global bookname
+    bookname = Entry(frame, width=35, borderwidth=5)
+    bookname.place(x=150, y=110, width=200)
+
+    lblfrstrow1 = Label(frame, text="Author *")
+    lblfrstrow1.place(x=150, y=130)
+    global author
+    author = Entry(frame, width=35, borderwidth=5)
+    author.place(x=150, y=150, width=200)
+    global genre
+    lblfrstrow2 = Label(frame, text="Genre *")
+    lblfrstrow2.place(x=150, y=170)
+
+    genre = Entry(frame, width=35, borderwidth=5)
+    genre.place(x=150, y=190, width=200)
+
+    lblfrstrow3 = Label(frame, text="Publisher *")
+    lblfrstrow3.place(x=150, y=210)
+    global publisher
+    publisher = Entry(frame, width=35, borderwidth=5)
+    publisher.place(x=150, y=230, width=200)
+
+    lblfrstrow = Label(frame, text="Stock *")
+    lblfrstrow.place(x=150, y=250)
+    global stock
+    stock = Entry(frame, width=35, borderwidth=5)
+    stock.place(x=150, y=270, width=200)
+
+    addbtn = Button(frame, text="ADD",
+                    width=35, borderwidth=5, command=dclick)
+    addbtn.place(x=180, y=300)
+
+
+def afteradlog():
+    clearFrame()
+    issuebtn = Button(frame, text="ADD BOOKS", command=adaddboks,
+                      width=35, borderwidth=5)
+    issuebtn.place(x=180, y=130)
+    returnbtn = Button(frame, text="DELETE BOOKS", command=delbboks,
+                       width=35, borderwidth=5)
+    returnbtn.place(x=180, y=170)
+    searchbtn = Button(frame, text="SHOW ALL MEMBERS",
+                       width=35, borderwidth=5)
+    searchbtn.place(x=180, y=210)
+    return
+
+
+def adlog():
+    if Username4.get() == "" or password4.get() == "":
+        messagebox.showinfo("Error", "Please complete the required fields")
+    elif Username4.get() == "thumbCancer" and password4.get() == "bidipta":
+        messagebox.showinfo("Success", "Logged in as admin")
+        afteradlog()
+    elif Username4.get() != "thumbCancer" and password4.get() == "bidipta":
+        messagebox.showinfo("Error", "Wrong Username")
+    elif Username4.get() == "thumbCancer" and password4.get() != "bidipta":
+        messagebox.showinfo("Error", "Wrong password")
+    elif Username4.get() != "thumbCancer" and password4.get() != "bidipta":
+        messagebox.showinfo("Error", "Wrong username and wrong password")
+        Username4.delete(0, END)
+        password4.delete(0, END)
+
+    return
+
+
 def admin():
     clearFrame()
     global Username
@@ -427,17 +523,18 @@ def admin():
     drop.place(x=0, y=0)
     lblfrstrow = Label(frame, text="Administrative Username *")
     lblfrstrow.place(x=150, y=90)
-
+    global Username4
     Username4 = Entry(frame, width=35, borderwidth=5)
     Username4.place(x=150, y=110, width=200)
 
     lblsecrow4 = Label(frame, text="Administrative Password *")
     lblsecrow4.place(x=150, y=150)
 
+    global password4
     password4 = Entry(frame, width=35, borderwidth=5)
     password4.place(x=150, y=170, width=200)
 
-    submitbtn2 = Button(frame, text="Administrative Login",
+    submitbtn2 = Button(frame, text="Administrative Login", command=adlog,
                         width=35, borderwidth=5)
     submitbtn2.place(x=160, y=220, width=180)
 
@@ -475,7 +572,8 @@ def mainpro():
 
     login_btn = PhotoImage(
         file='FRONTEND/iconAndImages/login.png')
-    submitbtn = Button(frame, image=login_btn, command=login, borderwidth=0)
+    submitbtn = Button(frame, image=login_btn,
+                       command=login, borderwidth=0)
     submitbtn.place(x=160, y=220, width=155)
 
     labpwd = Button(frame, text="Forgot Password?",
