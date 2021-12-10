@@ -1,7 +1,7 @@
 import datetime
 import mysql.connector as sqlt
 con = sqlt.connect(host="localhost", user="root",
-                   password="sristi", database="library")
+                   password="1234", database="library")
 cursor = con.cursor()
 
 
@@ -76,12 +76,12 @@ def book_return(memID, bookID):
                 q2 = "select bookId, NoOfCopiesLeft from bookstable where bookId={};".format(
                     bookID)
                 cursor.execute(q2)
-                r = cursor.fetchone()
+                r1 = cursor.fetchone()
 
-                if r:
+                if r1:
                     dt_str = str(datetime.datetime.now())
-                    NoOfCopiesLeft = r[1]+1
-                    q3 = "insert into issuetable(bookId,userId,DateIssued) values('{}','{}','{}');".format(
+                    NoOfCopiesLeft = r1[1]+1
+                    q3 = "insert into returntable(bookId,userId,datereturned) values('{}','{}','{}');".format(
                         bookID, memID, dt_str)
                     cursor.execute(q3)
                     q4 = "update bookstable set NoOfCopiesLeft={} where bookId='{}';".format(

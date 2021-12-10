@@ -4,7 +4,7 @@ from tabulate import tabulate
 current_user = []
 
 mycon = mysql.connector.connect(
-    host="localhost", user="root", password="sristi", database="library")
+    host="localhost", user="root", password="1234", database="library")
 
 if not mycon:
     print("Error in connecting")

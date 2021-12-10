@@ -8,7 +8,7 @@ from tkinter import messagebox
 import mysql.connector
 
 mycon = mysql.connector.connect(
-    host="localhost", user="root", password="sristi", database="library")
+    host="localhost", user="root", password="1234", database="library")
 
 if not mycon:
     print("Error in connecting")
@@ -33,27 +33,28 @@ def clearFrame():
 
 
 def verifyissue():
+    a = book_issue(str(userID), str(bookid.get()))
     if bookid.get == "":
         messagebox.showinfo("Error", "Please complete the required field!")
-    elif book_issue(str(userID), str(bookid.get())) == "Book Issued":
+    elif a == "Book Issued":
         messagebox.showinfo(
             "Issued", "Book issued, return it before 14 days to exempt any fine")
         after_login_signup()
     else:
-        messagebox.showinfo("Error", book_issue(
-            str(userID), str(bookid.get())))
+        messagebox.showinfo("Error", a)
 
 
 def verifyreturn():
-    if bookid.get == "":
+    a = book_return(int(userID), int(bookid6.get()))
+    if bookid6.get == "":
         messagebox.showinfo("Error", "Please complete the required field!")
-    elif book_return(str(userID), str(bookid.get())) == "Book Returned":
+    elif a == "Book Returned":
+        a
         messagebox.showinfo(
             "Returned", "Thankyou. May you have a good day ahead !")
         after_login_signup()
     else:
-        messagebox.showinfo("Error", book_return(
-            str(userID), str(bookid.get())))
+        messagebox.showinfo("Error", a)
 
 
 def makesearch():
@@ -155,9 +156,9 @@ def after_returnbtn():
     lblfrstrow = Label(frame, text="Book ID -")
     lblfrstrow.place(x=50, y=20)
 
-    global bookid
-    bookid = Entry(frame, width=35, borderwidth=5)
-    bookid.place(x=150, y=20, width=200)
+    global bookid6
+    bookid6 = Entry(frame, width=35, borderwidth=5)
+    bookid6.place(x=150, y=20, width=200)
 
     verifyissuebtn = Button(frame, text="RETURN",
                             bg='yellow', command=verifyreturn)
