@@ -33,28 +33,27 @@ def clearFrame():
 
 
 def verifyissue():
-    a = book_issue(str(userID), str(bookid.get()))
     if bookid.get == "":
         messagebox.showinfo("Error", "Please complete the required field!")
-    elif a == "Book Issued":
+    elif book_issue(str(userID), str(bookid.get())) == "Book Issued":
         messagebox.showinfo(
             "Issued", "Book issued, return it before 14 days to exempt any fine")
         after_login_signup()
     else:
-        messagebox.showinfo("Error", a)
+        messagebox.showinfo("Error", book_issue(
+            str(userID), str(bookid.get())))
 
 
 def verifyreturn():
-    a = book_return(int(userID), int(bookid6.get()))
     if bookid6.get == "":
         messagebox.showinfo("Error", "Please complete the required field!")
-    elif a == "Book Returned":
-        a
+    elif book_return(int(userID), int(bookid6.get())) == "Book Returned":
         messagebox.showinfo(
             "Returned", "Thankyou. May you have a good day ahead !")
         after_login_signup()
     else:
-        messagebox.showinfo("Error", a)
+        messagebox.showinfo("Error", book_return(
+            int(userID), int(bookid6.get())))
 
 
 def makesearch():
