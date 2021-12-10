@@ -56,30 +56,6 @@ def verifyreturn():
             int(userID), int(bookid6.get())))
 
 
-def makesearch():
-    clearFrame()
-    mycursor.execute("select * from bookstable ")
-    tv = ttk.Treeview(frame)
-    tv["columns"] = ("1", "2", "3", "4")
-    tv.column("1", anchor=CENTER, width=120, minwidth=120)
-    tv.column("2", anchor=CENTER, width=200, minwidth=120)
-    tv.column("3", anchor=CENTER, width=200, minwidth=120)
-    tv.column("4", anchor=CENTER, width=120, minwidth=120)
-
-    tv.heading(1, text="BookID")
-    tv.heading(2, text="Title")
-    tv.heading(3, text="Author")
-    tv.heading(4, text="Availability")
-
-    i = 0
-    for row in mycursor:
-        tv.insert(parent='', index='end', iid=i,
-                  values=(row[0], row[1], row[2], row[6]))
-        # tv.insert('', i, text='', values=(row[0], row[1], row[2], row[4]))
-        i = i+1
-    tv.place(x=20, y=80)
-
-
 def make():
     clearFrame()
     # a = str(bookid2.get())
@@ -88,7 +64,7 @@ def make():
     # book_search(int(bookid2.get()))
     tv = ttk.Treeview(frame, columns=(1, 2, 3, 4),
                       show="headings", height="15")
-    tv.place(x=20, y=80)
+    tv.place(x=20, y=20)
 
     tv.column("1", anchor=CENTER, width=120, minwidth=120)
     tv.column("2", anchor=CENTER, width=200, minwidth=120)
@@ -111,7 +87,7 @@ def make():
 
     back = Button(frame, text="Main Menu", bg='cyan',
                   command=after_login_signup)
-    back.place(x=260, y=430, width=155)
+    back.place(x=260, y=350, width=155)
 
 
 def after_searchForbook():
@@ -421,6 +397,36 @@ def eclick():
     return
 
 
+def showallmembers():
+    clearFrame()
+    # a = str(bookid2.get())
+    mycursor.execute("select * from usersdata ")
+
+    # book_search(int(bookid2.get()))
+    tv = ttk.Treeview(frame, columns=(1, 2, 3, 4),
+                      show="headings", height="15")
+    tv.place(x=20, y=20)
+
+    tv.column("1", anchor=CENTER, width=120, minwidth=120)
+    tv.column("2", anchor=CENTER, width=200, minwidth=120)
+    tv.column("3", anchor=CENTER, width=200, minwidth=120)
+    tv.column("4", anchor=CENTER, width=120, minwidth=120)
+
+    tv.heading(1, text="UserID")
+    tv.heading(2, text="Name")
+    tv.heading(3, text="Phone No")
+    tv.heading(4, text="Current Books Issued")
+    i = 0
+    for row in mycursor:
+        tv.insert('', i, text='', values=(
+            row[2], row[0], row[3], row[5]))
+        i = i+1
+
+    back = Button(frame, text="Main Menu", bg='cyan',
+                  command=afteradlog)
+    back.place(x=260, y=350, width=155)
+
+
 def delbboks():
     clearFrame()
     lblfrstrow = Label(frame, text="BookID *")
@@ -479,7 +485,7 @@ def afteradlog():
     returnbtn = Button(frame, text="DELETE BOOKS", command=delbboks,
                        width=35, borderwidth=5)
     returnbtn.place(x=180, y=170)
-    searchbtn = Button(frame, text="SHOW ALL MEMBERS",
+    searchbtn = Button(frame, text="SHOW ALL MEMBERS", command=showallmembers,
                        width=35, borderwidth=5)
     searchbtn.place(x=180, y=210)
     return
