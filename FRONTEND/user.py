@@ -2,15 +2,17 @@ import mysql.connector
 from pandas import *
 from tabulate import tabulate
 current_user = []
+userexists = False
+
 
 mycon = mysql.connector.connect(
     host="localhost", user="root", password="1234", database="library")
-
 if not mycon:
     print("Error in connecting")
 mycursor = mycon.cursor()
 
 
+# create a new user
 def new_user(name, password, phoneNo, address):
     # Exception Handling
 
@@ -35,99 +37,7 @@ def new_user(name, password, phoneNo, address):
     return False
 
 
-def phno_edit(memID, phoneNo):
-    # Exception Handling
-    try:
-        qry = "select * from usersdata where userId='{}';".format(memID)
-        mycursor.execute(qry)
-        r = mycursor.fetchone()
-        if r:
-            qry1 = "update usersdata set PhoneNo='{}' where userId='{}';".format(
-                phoneNo, memID)
-            mycursor.execute(qry1)
-            mycon.commit()
-            return True
-        else:
-            return "Wrong userId"
-    except:
-        return False
-
-
-def ad_edit(memID, address):
-    # Exception Handling
-    try:
-        qry = "select * from usersdata where userId='{}';".format(memID)
-        mycursor.execute(qry)
-        r = mycursor.fetchone()
-        if r:
-            qry1 = "update usersdata set address='{}' where userId={};".format(
-                address, memID)
-            mycursor.execute(qry1)
-            mycon.commit()
-            return True
-        else:
-            return "Wrong userId"
-    except:
-        return "False"
-
-
-def pwd_edit(memID, password):
-    # Exception Handling
-    try:
-        qry = "select * from usersdata where userId='{}';".format(memID)
-        mycursor.execute(qry)
-        r = mycursor.fetchone()
-        if r:
-
-            qry1 = "update usersdata set Password='{}' where userId='{}';".format(
-                password, memID)
-            mycursor.execute(qry1)
-            mycon.commit()
-            return True
-
-        else:
-            return "Wrong userId"
-    except:
-        return False
-
-
-def member_delete(memID):
-    # Exception Handling
-    try:
-        qry = "select * from usersdata where userId='{}';".format(memID)
-        mycursor.execute(qry)
-        r = mycursor.fetchone()
-        if r:
-            qry = "delete from usersdata where userId='{}';".format(memID)
-            mycursor.execute(qry)
-            mycon.commit()
-            return True
-        else:
-            return False
-    except:
-        return False
-
-
-def member_search(memID):
-    # Exception Handling
-    try:
-        qry = "select * from usersdata where userId='{}';".format(memID)
-        mycursor.execute(qry)
-        r = mycursor.fetchone()
-        if r:
-            qry = "select * from usersdata where userId='{}';".format(memID)
-            df = read_sql(qry, mycon)
-            print(tabulate(df, headers='keys', tablefmt='psql', showindex=False))
-            return True
-        else:
-            False
-    except:
-        return False
-
-
-userexists = False
-
-
+# logging in a existing user
 def existing_user(userId_phn, password):
     global mycursor
     global userexists
@@ -155,10 +65,105 @@ def existing_user(userId_phn, password):
         return False
 
 
+# function to edit phone number
+def phno_edit(memID, phoneNo):
+    # Exception Handling
+    try:
+        qry = "select * from usersdata where userId='{}';".format(memID)
+        mycursor.execute(qry)
+        r = mycursor.fetchone()
+        if r:
+            qry1 = "update usersdata set PhoneNo='{}' where userId='{}';".format(
+                phoneNo, memID)
+            mycursor.execute(qry1)
+            mycon.commit()
+            return True
+        else:
+            return "Wrong userId"
+    except:
+        return False
+
+
+# function to edit address
+def ad_edit(memID, address):
+    # Exception Handling
+    try:
+        qry = "select * from usersdata where userId='{}';".format(memID)
+        mycursor.execute(qry)
+        r = mycursor.fetchone()
+        if r:
+            qry1 = "update usersdata set address='{}' where userId={};".format(
+                address, memID)
+            mycursor.execute(qry1)
+            mycon.commit()
+            return True
+        else:
+            return "Wrong userId"
+    except:
+        return "False"
+
+
+# function to change password
+def pwd_edit(memID, password):
+    # Exception Handling
+    try:
+        qry = "select * from usersdata where userId='{}';".format(memID)
+        mycursor.execute(qry)
+        r = mycursor.fetchone()
+        if r:
+
+            qry1 = "update usersdata set Password='{}' where userId='{}';".format(
+                password, memID)
+            mycursor.execute(qry1)
+            mycon.commit()
+            return True
+
+        else:
+            return "Wrong userId"
+    except:
+        return False
+
+
+def member_delete(memID):  # function to delete a member
+    # Exception Handling
+    try:
+        qry = "select * from usersdata where userId='{}';".format(memID)
+        mycursor.execute(qry)
+        r = mycursor.fetchone()
+        if r:
+            qry = "delete from usersdata where userId='{}';".format(memID)
+            mycursor.execute(qry)
+            mycon.commit()
+            return True
+        else:
+            return False
+    except:
+        return False
+
+
+def member_search(memID):  # funtion to search for a member
+    # Exception Handling
+    try:
+        qry = "select * from usersdata where userId='{}';".format(memID)
+        mycursor.execute(qry)
+        r = mycursor.fetchone()
+        if r:
+            qry = "select * from usersdata where userId='{}';".format(memID)
+            df = read_sql(qry, mycon)
+            print(tabulate(df, headers='keys', tablefmt='psql', showindex=False))
+            return True
+        else:
+            False
+    except:
+        return False
+
+
+# function returns an array with the information of the current user
 def current_users():
     return current_user
 
 
+# function returns the userID of the current user after taking in the name
 def current_user_id(Name):
     mycursor.execute("select * from usersdata")
     data = mycursor.fetchall()

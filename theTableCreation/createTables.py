@@ -1,6 +1,6 @@
 import mysql.connector as sq
 mycon = sq.connect(host="localhost", user="root",
-                   password="", database="")
+                   password="1234", database="library")
 if not mycon:
     print("Error in connecting")
 
@@ -26,14 +26,14 @@ def bookTable():
 def issuetable():
     global mycursor
     mycursor.execute(
-        "create table IssueTable(issueId int auto_increment, bookId varchar(30), userId varchar(20), DateIssued varchar(100), primary key(issueId))")
+        "create table IssueTable(issueId int auto_increment, bookId varchar(30), userId varchar(20), DateIssued varchar(100),no_of_copies int, primary key(issueId))")
     mycursor.execute("alter table Issuetable auto_increment=171216")
 
 
 def returnTable():
     global mycursor
     mycursor.execute(
-        "create table ReturnTable(returnId int auto_increment, bookId varchar(30), userId varchar(20), DateReturned varchar(100), primary key(returnId))")
+        "create table ReturnTable(returnId int auto_increment, bookId varchar(30), userId varchar(20), DateReturned varchar(100),no_of_copies int, primary key(returnId))")
     mycursor.execute("alter table ReturnTable auto_increment=567889")
 
 

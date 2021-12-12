@@ -1,30 +1,43 @@
+# C:\Users\dipan\AppData\Local\Programs\Python\Python310\Lib\site-packages
+# importing the library(cubra)
 from books import *
 from user import *
 from transaction import *
-# C:\Users\dipan\AppData\Local\Programs\Python\Python310\Lib\site-packages
+from report import *
+
+# importing tkinter
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+
 import mysql.connector
 
+
+# connecting to the database
 mycon = mysql.connector.connect(
     host="localhost", user="root", password="1234", database="library")
-
 if not mycon:
     print("Error in connecting")
 mycursor = mycon.cursor()
 
+# variable to store the current userID (user who is using the application )
 userID = ''
+
+# setting uo the tkinter window
 root = Tk()
 root.iconbitmap('FRONTEND/iconAndImages/icon.ico')
 root.geometry("690x450")
-frame = LabelFrame(root)
-frame.pack(side="top", expand='yes', fill='both')
 # root.attributes('-fullscreen', True)
+# root.bind('<Escape>', lambda e: root.destroy()) make escape exit the program
 root.title("cubra")
 root.resizable(False, False)
 root.configure(bg='pink')
-# root.bind('<Escape>', lambda e: root.destroy()) make escape exit the program
+
+# setting up the frame
+frame = LabelFrame(root)
+frame.pack(side="top", expand='yes', fill='both')
+
+# clear the frame(window)
 
 
 def clearFrame():
@@ -32,31 +45,40 @@ def clearFrame():
         widget.destroy()
 
 
+# function that verifys issue after taking in the bookid
 def verifyissue():
-    if bookid.get == "":
-        messagebox.showinfo("Error", "Please complete the required field!")
-    elif book_issue(str(userID), str(bookid.get())) == "Book Issued":
-        messagebox.showinfo(
-            "Issued", "Book issued, return it before 14 days to exempt any fine")
-        after_login_signup()
-    else:
-        messagebox.showinfo("Error", book_issue(
-            str(userID), str(bookid.get())))
+    try:
+        if bookid.get == "":
+            messagebox.showinfo("Error", "Please complete the required field!")
+        elif book_issue(str(userID), str(bookid.get())) == "Book Issued":
+            messagebox.showinfo(
+                "Issued", "Book issued, return it before 14 days to exempt any fine")
+            after_login_signup()
+        else:
+            messagebox.showinfo("Error", book_issue(
+                str(userID), str(bookid.get())))
+    except:
+        messagebox.showinfo("Error", "Can't verify issue")
 
 
+# function that verifys return after taking in the bookid
 def verifyreturn():
-    if bookid6.get == "":
-        messagebox.showinfo("Error", "Please complete the required field!")
-    elif book_return(int(userID), int(bookid6.get())) == "Book Returned":
-        messagebox.showinfo(
-            "Returned", "Thankyou. May you have a good day ahead !")
-        after_login_signup()
-    else:
-        messagebox.showinfo("Error", book_return(
-            int(userID), int(bookid6.get())))
+    try:
+        if bookid6.get == "":
+            messagebox.showinfo("Error", "Please complete the required field!")
+        elif book_return(int(userID), int(bookid6.get())) == "Book Returned":
+            messagebox.showinfo(
+                "Returned", "Thankyou. May you have a good day ahead !")
+            after_login_signup()
+        else:
+            messagebox.showinfo("Error", book_return(
+                int(userID), int(bookid6.get())))
+    except:
+        messagebox.showinfo("Error", "Can't verify return")
 
 
-def make():
+# function to show all the books in the library to the users
+def showallbooks():
     clearFrame()
     # a = str(bookid2.get())
     mycursor.execute("select * from bookstable ")
@@ -90,61 +112,46 @@ def make():
     back.place(x=260, y=350, width=155)
 
 
-def after_searchForbook():
-    clearFrame()
-    lblfrstrow = Label(frame, text="Title *")
-    lblfrstrow.place(x=150, y=90)
-
-    global bookid2
-    bookid2 = Entry(frame, width=35, borderwidth=5)
-    bookid2.place(x=150, y=110, width=200)
-
-    verifysearch = Button(frame, text="SEARCH", command=make,
-                          bg='yellow')
-    verifysearch.place(x=165, y=150, width=155)
-
-    back = Button(frame, text="Main Menu", bg='cyan',
-                  command=after_login_signup)
-    back.place(x=165, y=180, width=155)
-
-
+# function that  decides what happen what happens when the user clicks the issue option after logging in
 def after_issuebtn():
     clearFrame()
-    lblfrstrow = Label(frame, text="Book ID -")
-    lblfrstrow.place(x=50, y=20)
+    lblfrstrow = Label(frame, text="Book ID *")
+    lblfrstrow.place(x=150, y=150)
 
     global bookid
     bookid = Entry(frame, width=35, borderwidth=5)
-    bookid.place(x=150, y=20, width=200)
+    bookid.place(x=150, y=170, width=350)
 
     verifyissuebtn = Button(frame, text="ISSUE",
                             bg='yellow', command=verifyissue)
-    verifyissuebtn.place(x=160, y=80, width=155)
+    verifyissuebtn.place(x=230, y=220, width=155)
 
-    back = Button(frame, text="Main Menu", bg='cyan',
+    back = Button(frame, text="Back", bg='cyan',
                   command=after_login_signup)
-    back.place(x=160, y=110, width=155)
+    back.place(x=230, y=280, width=155)
 
 
+# function that  decides what happen what happens when the user clicks the return option after logging in
 def after_returnbtn():
     clearFrame()
-    lblfrstrow = Label(frame, text="Book ID -")
-    lblfrstrow.place(x=50, y=20)
+    lblfrstrow = Label(frame, text="Book ID *")
+    lblfrstrow.place(x=150, y=150)
 
     global bookid6
     bookid6 = Entry(frame, width=35, borderwidth=5)
-    bookid6.place(x=150, y=20, width=200)
+    bookid6.place(x=150, y=170, width=350)
 
     verifyissuebtn = Button(frame, text="RETURN",
                             bg='yellow', command=verifyreturn)
-    verifyissuebtn.place(x=160, y=80, width=155)
+    verifyissuebtn.place(x=230, y=220, width=155)
 
-    back = Button(frame, text="Main Menu", bg='cyan',
+    back = Button(frame, text="Back", bg='cyan',
                   command=after_login_signup)
-    back.place(x=160, y=110, width=155)
+    back.place(x=230, y=280, width=155)
     return
 
 
+# this function changes the password by calling the pwd_edit function from the library
 def change_passworde():
     a = paw.get()
     if paw.get == "":
@@ -159,6 +166,7 @@ def change_passworde():
         messagebox.showinfo("Success", "Error")
 
 
+# this function changes the phone number by calling the phno_edit function from the library
 def change_phone():
     a = phone2.get()
     if phone2.get == "":
@@ -173,6 +181,7 @@ def change_phone():
         messagebox.showinfo("Success", phno_edit(int(userID), a))
 
 
+# this function changes the address by calling the ad_edit function from the library
 def change_address():
 
     global address
@@ -187,12 +196,14 @@ def change_address():
         messagebox.showinfo("Success", ad_edit(int(userID), a))
 
 
+# this function deletes the user account by calling the member_delete function from the library
 def delete_account():
     member_delete(int(userID))
     messagebox.showinfo("GoodBye", "We are sad to see you GO!!!")
     mainpro()
 
 
+# entry box for change passwprd
 def passwor():
     clearFrame()
     global paw
@@ -203,14 +214,15 @@ def passwor():
     lblsecrow.place(x=150, y=150)
 
     submit = Button(frame, text="Change Password",
-                    bg='cyan', command=change_passworde)
-    submit.place(x=260, y=220, width=155)
+                    bg='red', command=change_passworde)
+    submit.place(x=230, y=220, width=155)
 
     back = Button(frame, text="Back", bg='cyan',
                   command=account)
-    back.place(x=260, y=430, width=155)
+    back.place(x=230, y=280, width=155)
 
 
+# entry box for change phone no
 def phone():
     clearFrame()
     global phone2
@@ -221,14 +233,15 @@ def phone():
     lblsecrow.place(x=150, y=150)
 
     submit = Button(frame, text="Change PhoneNo",
-                    bg='cyan', command=change_phone)
-    submit.place(x=260, y=220, width=155)
+                    bg='red', command=change_phone)
+    submit.place(x=230, y=220, width=155)
 
     back = Button(frame, text="Back", bg='cyan',
                   command=account)
-    back.place(x=260, y=430, width=155)
+    back.place(x=230, y=280, width=155)
 
 
+# entry box for change address
 def address():
     clearFrame()
     global address
@@ -238,40 +251,53 @@ def address():
     lblsecrow = Label(frame, text="New Address *")
     lblsecrow.place(x=150, y=150)
 
-    submit = Button(frame, text="Change Address", bg='cyan',
+    submit = Button(frame, text="Change Address", bg='red',
                     command=change_address)
-    submit.place(x=260, y=220, width=155)
+    submit.place(x=230, y=220, width=155)
 
     back = Button(frame, text="Back", bg='cyan',
                   command=account)
-    back.place(x=260, y=430, width=155)
+    back.place(x=230, y=280, width=155)
 
 
+# this function defines what happens after the user click the accountsettings from the right hand top corner dropdown menu
 def account():
     clearFrame()
 
     l = Label(frame, text="Change account settings")
     l.place(x=500/2, y=50)
-    changepassword = Button(
+    changeaddress = Button(
         frame, text="Change Addres", width=35, borderwidth=5, command=address)
-    changepassword.place(x=180, y=80)
-    changepassword = Button(
-        frame, text="Change PhoneNo", width=35, borderwidth=5, command=phone)
+    changeaddress.place(x=180, y=80)
 
-    changepassword.place(x=180, y=120)
-    changepassword = Button(
-        frame, text="Change Password", width=35, borderwidth=5, command=passwor)
+    changephone = Button(
+        frame, text="Change PhoneNo", width=35, borderwidth=5, command=phone)
+    changephone.place(x=180, y=120)
+
+    def warning1():
+        ans = messagebox.askyesno(
+            "Delete", "Are you sure you want to change your password?")
+        if ans:
+            passwor()
+    changepassword = Button(frame, text="Change Password",
+                            width=35, borderwidth=5, command=warning1)
     changepassword.place(x=180, y=160)
 
+    def warning():
+        ans = messagebox.askyesno(
+            "Delete", "Are you sure you want to delete your account?")
+        if ans:
+            delete_account()
     delete = Button(
-        frame, text="Delete Account", width=35, borderwidth=5, bg="red", command=delete_account)
+        frame, text="Delete Account", width=35, borderwidth=5, bg="red", comman=warning)
     delete.place(x=180, y=200)
 
     back = Button(frame, text="Main Menu", bg='cyan',
                   command=after_login_signup)
-    back.place(x=260, y=430, width=155)
+    back.place(x=230, y=280, width=155)
 
 
+# this function defines what happens after the user login
 def after_login_signup():
     clearFrame()
     x = current_users()
@@ -301,10 +327,14 @@ def after_login_signup():
                        width=35, borderwidth=5, command=after_returnbtn)
     returnbtn.place(x=180, y=170)
     searchbtn = Button(frame, text="SHOW ALL BOOKS",
-                       width=35, borderwidth=5, command=make)
+                       width=35, borderwidth=5, command=showallbooks)
     searchbtn.place(x=180, y=210)
+    chart = Button(frame, text="BEST READING BOOKS", command=col_chart,
+                   width=35, borderwidth=5)
+    chart.place(x=180, y=250)
 
 
+#  button function for signing up(new users)
 def signup_click():
     error = new_user(str(Username2.get()), str(password2.get()),
                      str(contact2.get()), str(address2.get()))
@@ -326,6 +356,7 @@ def signup_click():
         messagebox.messagebox.showinfo("Error", "User cant be created")
 
 
+# this function takes all the needed data for new user
 def signup():
     clearFrame()
 
@@ -362,6 +393,7 @@ def signup():
     signinbtn2.place(x=160, y=300, width=155)
 
 
+# button function login(existing users)
 def login():
 
     if Username.get() == "" or password.get() == "":
@@ -379,24 +411,37 @@ def login():
         password.delete(0, END)
 
 
-def dclick():
-    if add_book(bookname.get(), author.get(), genre.get(), publisher.get(), int(stock.get())):
-        messagebox.showinfo(
-            "Success", "Successfully added the book into the library")
-        afteradlog()
-    else:
-        messagebox.showinfo("Error", "Could not add the books")
+# button function for adding books
+def addbookbutton():
+    try:
+        if bookname.get() == "" or author.get() == "" or genre.get() == "" or publisher.get() == "" or stock.get() == "":
+            messagebox.showinfo(
+                "Missing fields", "Please complete the required fields")
+        elif add_book(bookname.get(), author.get(), genre.get(), publisher.get(), int(stock.get())):
+            messagebox.showinfo(
+                "Success", "Successfully added the book into the library")
+            afteradlog()
+        else:
+            messagebox.showinfo("Error", "Could not add the books")
+    except:
+        messagebox.showinfo("Error", "Check your stock field properly!!!")
 
 
-def eclick():
-    if book_delete(int(bookid1.get())):
-        messagebox.showinfo("Success", "Books Successfully Deleted")
-        afteradlog()
-    else:
+# button fnction for deleting buttons
+def deletebooksbutton():
+    try:
+        if bookid1.get() == "":
+            messagebox.showinfo("Error", "Complete the required field")
+        elif book_delete(int(bookid1.get())):
+            messagebox.showinfo("Success", "Books Successfully Deleted")
+            afteradlog()
+        else:
+            messagebox.showinfo("Error", "Wrong BookID")
+    except:
         messagebox.showinfo("Error", "Wrong BookID")
-    return
 
 
+# button function for showing all members
 def showallmembers():
     clearFrame()
     # a = str(bookid2.get())
@@ -422,61 +467,69 @@ def showallmembers():
             row[2], row[0], row[3], row[5]))
         i = i+1
 
-    back = Button(frame, text="Main Menu", bg='cyan',
+    back = Button(frame, text="Back", bg='cyan',
                   command=afteradlog)
     back.place(x=260, y=350, width=155)
 
 
+# entry box for deleting books
 def delbboks():
     clearFrame()
     lblfrstrow = Label(frame, text="BookID *")
-    lblfrstrow.place(x=150, y=90)
+    lblfrstrow.place(x=150, y=150)
     global bookid1
     bookid1 = Entry(frame, width=35, borderwidth=5)
-    bookid1.place(x=150, y=110, width=200)
+    bookid1.place(x=150, y=170, width=350)
     delbtn = Button(frame, text="DELETE",
-                    width=35, borderwidth=5, command=eclick)
-    delbtn.place(x=180, y=150)
-    return()
+                    width=35, borderwidth=5, command=deletebooksbutton, fg="red")
+    delbtn.place(x=180, y=220)
+    delbtn = Button(frame, text="Back", width=35,
+                    borderwidth=5, command=afteradlog, bg="cyan")
+    delbtn.place(x=180, y=280)
 
 
+# entry boxes for adding books
 def adaddboks():
     clearFrame()
     lblfrstrow = Label(frame, text="Title *")
-    lblfrstrow.place(x=150, y=90)
+    lblfrstrow.place(x=150, y=70)
     global bookname
     bookname = Entry(frame, width=35, borderwidth=5)
-    bookname.place(x=150, y=110, width=200)
+    bookname.place(x=150, y=90, width=350)
 
     lblfrstrow1 = Label(frame, text="Author *")
-    lblfrstrow1.place(x=150, y=130)
+    lblfrstrow1.place(x=150, y=120)
     global author
     author = Entry(frame, width=35, borderwidth=5)
-    author.place(x=150, y=150, width=200)
+    author.place(x=150, y=140, width=350)
     global genre
     lblfrstrow2 = Label(frame, text="Genre *")
     lblfrstrow2.place(x=150, y=170)
 
     genre = Entry(frame, width=35, borderwidth=5)
-    genre.place(x=150, y=190, width=200)
+    genre.place(x=150, y=190, width=350)
 
     lblfrstrow3 = Label(frame, text="Publisher *")
-    lblfrstrow3.place(x=150, y=210)
+    lblfrstrow3.place(x=150, y=220)
     global publisher
     publisher = Entry(frame, width=35, borderwidth=5)
-    publisher.place(x=150, y=230, width=200)
+    publisher.place(x=150, y=240, width=350)
 
     lblfrstrow = Label(frame, text="Stock *")
-    lblfrstrow.place(x=150, y=250)
+    lblfrstrow.place(x=150, y=270)
     global stock
     stock = Entry(frame, width=35, borderwidth=5)
-    stock.place(x=150, y=270, width=200)
+    stock.place(x=150, y=290, width=350)
 
-    addbtn = Button(frame, text="ADD",
-                    width=35, borderwidth=5, command=dclick)
-    addbtn.place(x=180, y=300)
+    addbtn = Button(frame, text="ADD", fg="red",
+                    width=35, borderwidth=5, command=addbookbutton)
+    addbtn.place(x=180, y=320)
+    back = Button(frame, text="Back",
+                  width=35, borderwidth=5, command=afteradlog, bg="cyan")
+    back.place(x=180, y=360)
 
 
+# this functions defines what happens after admin login
 def afteradlog():
     clearFrame()
     issuebtn = Button(frame, text="ADD BOOKS", command=adaddboks,
@@ -488,9 +541,16 @@ def afteradlog():
     searchbtn = Button(frame, text="SHOW ALL MEMBERS", command=showallmembers,
                        width=35, borderwidth=5)
     searchbtn.place(x=180, y=210)
+    chart = Button(frame, text="SHOW STATS", command=col_chart,
+                   width=35, borderwidth=5)
+    chart.place(x=180, y=250)
+    logout = Button(frame, text="LOGOUT", command=mainpro, bg="red",
+                    width=35, borderwidth=5)
+    logout.place(x=180, y=290)
     return
 
 
+# verify the admin logn
 def adlog():
     if Username4.get() == "" or password4.get() == "":
         messagebox.showinfo("Error", "Please complete the required fields")
@@ -509,6 +569,7 @@ def adlog():
     return
 
 
+# entry box for admin login
 def admin():
     clearFrame()
     global Username
@@ -545,6 +606,7 @@ def admin():
     submitbtn2.place(x=160, y=220, width=180)
 
 
+# flow of control starts form here(it defines what shows up when the users/admin starts the application)
 def mainpro():
     clearFrame()
     global Username
@@ -594,4 +656,5 @@ def mainpro():
     root.mainloop()
 
 
+# main(flow starts )
 mainpro()

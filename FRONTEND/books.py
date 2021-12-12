@@ -9,6 +9,8 @@ if not mycon:
     print("Error in connecting")
 mycursor = mycon.cursor()
 
+# add books function
+
 
 def add_book(title, author, genre, publisher, noOfcopies):
     # Exception Handling
@@ -21,6 +23,7 @@ def add_book(title, author, genre, publisher, noOfcopies):
         return False
 
 
+# delete books function
 def book_delete(bookID):
     # Exception Handling
     try:
@@ -38,6 +41,7 @@ def book_delete(bookID):
         return False
 
 
+# search for a book
 def book_search(bookID):
     # Exception Handling
     try:

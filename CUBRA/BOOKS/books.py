@@ -9,6 +9,8 @@ if not mycon:
     print("Error in connecting")
 mycursor = mycon.cursor()
 
+# add books function
+
 
 def add_book(title, author, genre, publisher, noOfcopies):
     # Exception Handling
@@ -21,6 +23,7 @@ def add_book(title, author, genre, publisher, noOfcopies):
         return False
 
 
+# delete books function
 def book_delete(bookID):
     # Exception Handling
     try:
@@ -38,6 +41,7 @@ def book_delete(bookID):
         return False
 
 
+# search for a book
 def book_search(bookID):
     # Exception Handling
     try:
@@ -47,9 +51,12 @@ def book_search(bookID):
         if r:
             qry = "select * from bookstable where bookId='{}';".format(bookID)
             df = pd.read_sql(qry, mycon)
-            print(tabulate(df, headers='keys', tablefmt='psql', showindex=False))
-            return True
+            a = [str(r[0]), str(r[1]), str(r[2]), str(r[6])]
+            # print(a)
+            # print(r)
+            #print(tabulate(df, headers='keys', tablefmt='psql', showindex=False))
+            return a
         else:
-            return False
+            return "Wrong ID"
     except:
-        return False
+        return "Error"
