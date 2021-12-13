@@ -1,5 +1,7 @@
 # C:\Users\dipan\AppData\Local\Programs\Python\Python310\Lib\site-packages
 # importing the library(cubra)
+from logging import warning
+from tkinter import font
 from books import *
 from user import *
 from transaction import *
@@ -9,6 +11,7 @@ from report import *
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+from tkinter.font import Font
 
 import mysql.connector
 
@@ -36,6 +39,7 @@ root.configure(bg='pink')
 # setting up the frame
 frame = LabelFrame(root)
 frame.pack(side="top", expand='yes', fill='both')
+
 
 # clear the frame(window)
 
@@ -366,22 +370,22 @@ def signup():
     Username2 = Entry(frame, width=35, borderwidth=5)
     Username2.place(x=150, y=80, width=200)
 
-    lblsecrow = Label(frame, text="Password -")
+    lblsecrow = Label(frame, text="Password *")
     lblsecrow.place(x=150, y=110)
 
     global password2
     password2 = Entry(frame, width=35, borderwidth=5)
     password2.place(x=150, y=130, width=200)
 
-    lblthrdrow = Label(frame, text="Contact Number -")
+    lblthrdrow = Label(frame, text="Contact Number *")
     lblthrdrow.place(x=150, y=160)
 
     global contact2
     contact2 = Entry(frame, width=35, borderwidth=5)
     contact2.place(x=150, y=180, width=200)
 
-    lblthrdrow = Label(frame, text="Address -")
-    lblthrdrow.place(x=150, y=200)
+    lblthrdrow = Label(frame, text="Address *")
+    lblthrdrow.place(x=150, y=210)
 
     global address2
     address2 = Entry(frame, width=35, borderwidth=5)
@@ -389,8 +393,12 @@ def signup():
 
     global signinbtn2
     signinbtn2 = Button(frame, text="Create Account",
-                        command=signup_click, width=35, borderwidth=5)
+                        command=signup_click, width=35, borderwidth=5, bg="yellow")
     signinbtn2.place(x=160, y=300, width=155)
+
+    login = Button(frame, text="Back To Login",
+                   command=mainpro, width=35, borderwidth=5)
+    login.place(x=160, y=340, width=155)
 
 
 # button function login(existing users)
@@ -480,8 +488,14 @@ def delbboks():
     global bookid1
     bookid1 = Entry(frame, width=35, borderwidth=5)
     bookid1.place(x=150, y=170, width=350)
+
+    def warning1():
+        ans = messagebox.askyesno(
+            "Delete", "Are you sure you want to delete this book?")
+        if ans:
+            deletebooksbutton
     delbtn = Button(frame, text="DELETE",
-                    width=35, borderwidth=5, command=deletebooksbutton, fg="red")
+                    width=35, borderwidth=5, command=warning1, fg="red")
     delbtn.place(x=180, y=220)
     delbtn = Button(frame, text="Back", width=35,
                     borderwidth=5, command=afteradlog, bg="cyan")
@@ -544,7 +558,12 @@ def afteradlog():
     chart = Button(frame, text="SHOW STATS", command=col_chart,
                    width=35, borderwidth=5)
     chart.place(x=180, y=250)
-    logout = Button(frame, text="LOGOUT", command=mainpro, bg="red",
+
+    def warning1():
+        ans = messagebox.askyesno("Delete", "Are you sure you want to logout?")
+        if ans:
+            mainpro()
+    logout = Button(frame, text="LOGOUT", command=warning1, bg="red",
                     width=35, borderwidth=5)
     logout.place(x=180, y=290)
     return
